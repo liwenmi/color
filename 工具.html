@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./1.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/tinycolor/1.4.2/tinycolor.js"></script>
+</head>
+
+<body>
+    <div class="app">
+        <div class="main">
+            <div class="search">
+                <div class="button">rgb和16进制转换</div>
+
+                <input type="text" class="input" placeholder="输入#xxxxxx或者rgb(xx,xx,xx)完成色值转换">
+            </div>
+            <div class="color-picker">
+
+                <div class="color-container">
+
+                    <div class="color-show"></div>
+                </div>
+
+
+                <div class="color-control">
+
+                    <div class="color-move">
+                        <canvas></canvas>
+                        <div class="move"></div>
+                    </div>
+
+
+                    <div class="color-opacity">
+                        <div class="color-opacity-show"></div>
+                        <div class="slide"></div>
+                    </div>
+
+
+                    <div class="hue">
+                        <div class="slide"></div>
+                    </div>
+                </div>
+            </div>
+
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    var colors = [
+        {
+            name: "鸨色",
+            value: "#f7acbc",
+        },
+        {
+            name: "赤白橡",
+            value: "#deab8a",
+        },
+        {
+            name: "油色",
+            value: "#817936",
+        },
+        {
+            name: "绀桔梗",
+            value: "#444693",
+        },
+        {
+            name: "踯躅色",
+            value: "#ef5b9c",
+        },
+        {
+            name: "肌色",
+            value: "#fedcbd",
+        },
+        {
+            name: "伽罗色",
+            value: "#7f7522",
+        },
+        {
+            name: "花色",
+            value: "#2b4490",
+        },
+        {
+            name: "桜色", //第三
+            value: "#feeeed",
+        },
+        {
+            name: "橙色",
+            value: "#f47920",
+        },
+        {
+            name: "青丹",
+            value: "#80752c",
+        },
+        {
+            name: "瑠璃色",
+            value: "#2a5caa",
+        },
+        {
+            name: "蔷薇色", //第三
+            value: "#f05b72",
+        },
+        {
+            name: "灰茶",
+            value: "#905a3d",
+        },
+        {
+            name: "莺色",
+            value: "#87843b",
+        },
+        {
+            name: "琉璃绀",
+            value: "#224b8f",
+        },
+        {
+            name: "韩红", //第三
+            value: "#f15b6c",
+        },
+        {
+            name: "茶色",
+            value: "#8f4b2e",
+        },
+        {
+            name: "利久色",
+            value: "#726930",
+        },
+        {
+            name: "绀色",
+            value: "#003a6c",
+        },
+        {
+            name: "珊瑚色", //第三
+            value: "#f8aba6",
+        },
+        {
+            name: "桦茶色",
+            value: "#87481f",
+        },
+        {
+            name: "媚茶",
+            value: "#454926",
+        },
+        {
+            name: "青蓝",
+            value: "#102b6a",
+        },
+        {
+            name: "红梅色", //第三
+            value: "#f69c9f",
+        },
+        {
+            name: "枯茶",
+            value: "#5f3c23",
+        },
+        {
+            name: "蓝海松茶",
+            value: "#2e3a1f",
+        },
+        {
+            name: "杜若色",
+            value: "#426ab3",
+        },
+        {
+            name: "桃色", //第三
+            value: "#f58f98",
+        },
+        {
+            name: "焦茶",
+            value: "#6b473c",
+        },
+        {
+            name: "青钝",
+            value: "#4d4f36",
+        },
+        {
+            name: "胜色",
+            value: "#46485f",
+        },
+        {
+            name: "薄柿", //第三
+            value: "#ca8687",
+        },
+        {
+            name: "柑子色",
+            value: "#faa755",
+        },
+        {
+            name: "抹茶色",
+            value: "#b7ba6b",
+        },
+        {
+            name: "群青色",
+            value: "#4e72b8",
+        },
+        {
+            name: "薄红梅", //第三
+            value: "#f391a9",
+        },
+        {
+            name: "杏色",
+            value: "#fab27b",
+        },
+        {
+            name: "黄緑",
+            value: "#b2d235",
+        },
+        {
+            name: "铁绀",
+            value: "#181d4b",
+        },
+        {
+            name: "曙色", //第三
+            value: "#bd6758",
+        },
+        {
+            name: "蜜柑色",
+            value: "#f58220",
+        },
+        {
+            name: "苔色",
+            value: "#5c7a29",
+        },
+        {
+            name: "蓝铁",
+            value: "#1a2933",
+        },
+        {
+            name: "红色", //第三
+            value: "#d71345",
+        },
+        {
+            name: "褐色",
+            value: "#843900",
+        },
+        {
+            name: "若草色",
+            value: "#bed742",
+        },
+        {
+            name: "青褐",
+            value: "#121a2a",
+        },
+        {
+            name: "赤丹", //第三
+            value: "#d64f44",
+        },
+        {
+            name: "路考茶",
+            value: "#905d1d",
+        },
+        {
+            name: "若緑",
+            value: "#7fb80e",
+        },
+        {
+            name: "褐返",
+            value: "#0c212b",
+        },
+        {
+            name: "红赤", //第三
+            value: "#d93a49",
+        },
+        {
+            name: "饴色",
+            value: "#8a5d19",
+        },
+        {
+            name: "萌黄",
+            value: "#a3cf62",
+        },
+        {
+            name: "藤纳戸",
+            value: "#6a6da9",
+        },
+        {
+            name: "臙脂色", //第三
+            value: "#b3424a",
+        },
+        {
+            name: "丁子色",
+            value: "#8c531b",
+        },
+        {
+            name: "苗色",
+            value: "#769149",
+        },
+        {
+            name: "桔梗色",
+            value: "#585eaa",
+        },
+        {
+            name: "真赭", //第三
+            value: "#c76968",
+        },
+        {
+            name: "丁子茶",
+            value: "#826858",
+        },
+        {
+            name: "草色",
+            value: "#6d8346",
+        },
+        {
+            name: "绀蓝",
+            value: "#585eaa",
+        },
+        {
+            name: "今様色", //第三
+            value: "#bb505d",
+        },
+        {
+            name: "黄栌",
+            value: "#64492b",
+        },
+        {
+            name: "柳色",
+            value: "#78a355",
+        },
+        {
+            name: "藤色",
+            value: "#afb4db",
+        },
+        {
+            name: "梅染", //第三
+            value: "#987165",
+        },
+        {
+            name: "土器色",
+            value: "#ae6642",
+        },
+        {
+            name: "若草色",
+            value: "#abc88b",
+        },
+        {
+            name: "藤紫",
+            value: "#9b95c9",
+        },
+        {
+            name: "退红色", //第三
+            value: "#ac6767",
+        },
+        {
+            name: "黄枯茶",
+            value: "#56452d",
+        },
+        {
+            name: "松叶色",
+            value: "#74905d",
+        },
+        {
+            name: "青紫",
+            value: "#6950a1",
+        },
+        {
+            name: "苏芳", //第三
+            value: "#973c3f",
+        },
+        {
+            name: "狐色",
+            value: "#96582a",
+        },
+        {
+            name: "白緑",
+            value: "#cde6c7",
+        },
+        {
+            name: "菫色",
+            value: "#6f60aa",
+        },
+        {
+            name: "茜色", //第三
+            value: "#b22c46",
+        },
+        {
+            name: "黄橡",
+            value: "#705628",
+        },
+        {
+            name: "薄緑",
+            value: "#1d953f",
+        },
+        {
+            name: "鸠羽色",
+            value: "#867892",
+        },
+        {
+            name: "红", //第三
+            value: "#a7324a",
+        },
+        {
+            name: "银煤竹",
+            value: "#4a3113",
+        },
+        {
+            name: "千草色",
+            value: "#77ac98",
+        },
+        {
+            name: "薄色",
+            value: "#918597",
+        },
+        {
+            name: "银朱", //第三
+            value: "#aa363d",
+        },
+        {
+            name: "涅色",
+            value: "#412f1f",
+        },
+        {
+            name: "青緑",
+            value: "#007d65",
+        },
+        {
+            name: "薄鼠",
+            value: "#6f6d85",
+        },
+        {
+            name: "赤", //第三
+            value: "#ed1941",
+        },
+        {
+            name: "胡桃色",
+            value: "#845538",
+        },
+        {
+            name: "浅緑",
+            value: "#84bf96",
+        },
+        {
+            name: "鸠羽鼠",
+            value: "#594c6d",
+        },
+        {
+            name: "赤", //第三
+            value: "#ed1941",
+        },
+        {
+            name: "胡桃色",
+            value: "#845538",
+        },
+        {
+            name: "浅緑",
+            value: "#84bf96",
+        },
+        {
+            name: "鸠羽鼠",
+            value: "#594c6d",
+        },
+        {
+            name: "朱色", //第三
+            value: "#f26522",
+        },
+        {
+            name: "香色",
+            value: "#8e7437",
+        },
+        {
+            name: "緑",
+            value: "#45b97c",
+        },
+        {
+            name: "菖蒲色",
+            value: "#694d9f",
+        },
+        {
+            name: "洗朱", //第三
+            value: "#d2553d",
+        },
+        {
+            name: "国防色",
+            value: "#69541b",
+        },
+        {
+            name: "草色",
+            value: "#225a1f",
+        },
+        {
+            name: "江戸紫",
+            value: "#6f599c",
+        },
+        {
+            name: "红桦色", //第三
+            value: "#b4534b",
+        },
+        {
+            name: "练色",
+            value: "#d5c59f",
+        },
+        {
+            name: "木贼色",
+            value: "#367459",
+        },
+        {
+            name: "紫",
+            value: "#8552a1",
+        },
+        {
+            name: "红绯", //第三
+            value: "#ef4136",
+        },
+        {
+            name: "肉色",
+            value: "#cd9a5b",
+        },
+        {
+            name: "常盘色",
+            value: "#007947",
+        },
+        {
+            name: "灭紫",
+            value: "#543044",
+        },
+        {
+            name: "桦色", //第三
+            value: "#c63c26",
+        },
+        {
+            name: "人色",
+            value: "#cd9a5b",
+        },
+        {
+            name: "緑青色",
+            value: "#40835e",
+        },
+        {
+            name: "葡萄鼠",
+            value: "#63434f",
+        },
+        {
+            name: "铅丹色", //第三
+            value: "#f3715c",
+        },
+        {
+            name: "土色",
+            value: "#b36d41",
+        },
+        {
+            name: "千歳緑",
+            value: "#2b6447",
+        },
+        {
+            name: "古代紫",
+            value: "#7d5886",
+        },
+        {
+            name: "赭", //第三
+            value: "#a7573b",
+        },
+        {
+            name: "小麦色",
+            value: "#df9464",
+        },
+        {
+            name: "深緑",
+            value: "#005831",
+        },
+        {
+            name: "暗红",
+            value: "#401c44",
+        },
+        {
+            name: "绯色", //第三
+            value: "#aa2116",
+        },
+        {
+            name: "琥珀色",
+            value: "#b76f40",
+        },
+        {
+            name: "萌葱色",
+            value: "#006c54",
+        },
+        {
+            name: "葡萄",
+            value: "#472d56",
+        },
+        {
+            name: "丹", //第三
+            value: "#b64533",
+        },
+        {
+            name: "木兰色",
+            value: "#ad8b3d",
+        },
+        {
+            name: "青白橡",
+            value: "#375830",
+        },
+        {
+            name: "茄子绀",
+            value: "#45224a",
+        },
+        {
+            name: "土", //第三
+            value: "#b54334",
+        },
+        {
+            name: "栀子色",
+            value: "#dea32c",
+        },
+        {
+            name: "革色",
+            value: "#274d3d",
+        },
+        {
+            name: "紫绀",
+            value: "#411445",
+        },
+        {
+            name: "焦香", //第三
+            value: "#853f04",
+        },
+        {
+            name: "朽叶",
+            value: "#d1923f",
+        },
+        {
+            name: "麹尘",
+            value: "#375830",
+        },
+        {
+            name: "浓色",
+            value: "#4b2f3d",
+        },
+        {
+            name: "真红", //第三
+            value: "#840228",
+        },
+        {
+            name: "萱草色",
+            value: "#c88400",
+        },
+        {
+            name: "仙斎茶",
+            value: "#27342b",
+        },
+        {
+            name: "二蓝",
+            value: "#402e4c",
+        },
+        {
+            name: "绯", //第三
+            value: "#7a1723",
+        },
+        {
+            name: "黄金",
+            value: "#c37e00",
+        },
+        {
+            name: "若竹色",
+            value: "#65c294",
+        },
+        {
+            name: "菖蒲色",
+            value: "#c77eb5",
+        },
+        {
+            name: "红海老茶", //第三
+            value: "#a03939",
+        },
+        {
+            name: "金色",
+            value: "#c37e00",
+        },
+        {
+            name: "青磁色",
+            value: "#73b9a2",
+        },
+        {
+            name: "牡丹色",
+            value: "#ea66a6",
+        },
+        {
+            name: "浅苏芳", //第三
+            value: "#8a2e3b",
+        },
+        {
+            name: "金茶",
+            value: "#c37e00",
+        },
+        {
+            name: "青竹色",
+            value: "#72baa7",
+        },
+        {
+            name: "赤紫",
+            value: "#f173ac",
+        },
+        {
+            name: "鸢色", //第三
+            value: "#8e453f",
+        },
+        {
+            name: "卵色",
+            value: "#ffce7b",
+        },
+        {
+            name: "铁色",
+            value: "#005344",
+        },
+        {
+            name: "白",
+            value: "#fffffb",
+        },
+        {
+            name: "小豆色", //第三
+            value: "#8f4b4a",
+        },
+        {
+            name: "山吹色",
+            value: "#fcaf17",
+        },
+        {
+            name: "锖鼠",
+            value: "#122e29",
+        },
+        {
+            name: "胡粉色",
+            value: "#fffef9",
+        },
+        {
+            name: "弁柄色", //第三
+            value: "#892f1b",
+        },
+        {
+            name: "黄土色",
+            value: "#ba8448",
+        },
+        {
+            name: "铁御纳戸",
+            value: "#293047",
+        },
+        {
+            name: "生成色",
+            value: "#f6f5ec",
+        },
+        {
+            name: "栗梅", //第三
+            value: "#6b2c25",
+        },
+        {
+            name: "朽叶色",
+            value: "#896a45",
+        },
+        {
+            name: "青緑",
+            value: "#00ae9d",
+        },
+        {
+            name: "灰白",
+            value: "#d9d6c3",
+        },
+        {
+            name: "海老茶", //第三
+            value: "#733a31",
+        },
+        {
+            name: "空五倍子色",
+            value: "#76624c",
+        },
+        {
+            name: "锖浅葱",
+            value: "#508a88",
+        },
+        {
+            name: "石竹色",
+            value: "#d1c7b7",
+        },
+        {
+            name: "深绯", //第三
+            value: "#54211d",
+        },
+        {
+            name: "莺茶",
+            value: "#6d5826",
+        },
+        {
+            name: "水浅葱",
+            value: "#70a19f",
+        },
+        {
+            name: "象牙色",
+            value: "#f2eada",
+        },
+        {
+            name: "赤铜色", //第三
+            value: "#78331e",
+        },
+        {
+            name: "向日葵色",
+            value: "#ffc20e",
+        },
+        {
+            name: "新桥色",
+            value: "#50b7c1",
+        },
+        {
+            name: "乳白色",
+            value: "#d3d7d4",
+        },
+        {
+            name: "赤褐色", //第三
+            value: "#53261f",
+        },
+        {
+            name: "郁金色",
+            value: "#fdb933",
+        },
+        {
+            name: "浅葱色",
+            value: "#00a6ac",
+        },
+        {
+            name: "薄钝",
+            value: "#999d9c",
+        },
+        {
+            name: "金赤", //第三
+            value: "#f15a22",
+        },
+        {
+            name: "砂色",
+            value: "#d3c6a6",
+        },
+        {
+            name: "白群",
+            value: "#78cdd1",
+        },
+        {
+            name: "银鼠",
+            value: "#a1a3a6",
+        },
+        {
+            name: "赤茶", //第三
+            value: "#b4533c",
+        },
+        {
+            name: "芥子色",
+            value: "#c7a252",
+        },
+        {
+            name: "御纳戸色",
+            value: "#008792",
+        },
+        {
+            name: "茶鼠",
+            value: "#9d9087",
+        },
+        {
+            name: "赤锖色", //第三
+            value: "#84331f",
+        },
+        {
+            name: "淡黄",
+            value: "#dec674",
+        },
+        {
+            name: "瓮覗",
+            value: "#94d6da",
+        },
+        {
+            name: "鼠色",
+            value: "#8a8c8e",
+        },
+        {
+            name: "黄丹", //第三
+            value: "#f47a55",
+        },
+        {
+            name: "亜麻色",
+            value: "#b69968",
+        },
+        {
+            name: "水色",
+            value: "#afdfe4",
+        },
+        {
+            name: "薄墨色",
+            value: "#74787c",
+        },
+        {
+            name: "赤橙", //第三
+            value: "#f15a22",
+        },
+        {
+            name: "枯色",
+            value: "#c1a173",
+        },
+        {
+            name: "蓝鼠",
+            value: "#5e7c85",
+        },
+        {
+            name: "利休鼠",
+            value: "#7c8577",
+        },
+        {
+            name: "柿色", //第三
+            value: "#f3704b",
+        },
+        {
+            name: "鸟子色",
+            value: "#dbce8f",
+        },
+        {
+            name: "秘色",
+            value: "#76becc",
+        },
+        {
+            name: "铅色",
+            value: "#72777b",
+        },
+        {
+            name: "肉桂色", //第三
+            value: "#da765b",
+        },
+        {
+            name: "黄色",
+            value: "#ffd400",
+        },
+        {
+            name: "空色",
+            value: "#90d7ec",
+        },
+        {
+            name: "灰色",
+            value: "#77787b",
+        },
+        {
+            name: "桦色", //第三
+            value: "#c85d44",
+        },
+        {
+            name: "蒲公英色",
+            value: "#ffd400",
+        },
+        {
+            name: "青",
+            value: "#009ad6",
+        },
+        {
+            name: "钝色",
+            value: "#4f5555",
+        },
+        {
+            name: "炼瓦色", //第三
+            value: "#ae5039",
+        },
+        {
+            name: "中黄",
+            value: "#ffe600",
+        },
+        {
+            name: "蓝色",
+            value: "#145b7d",
+        },
+        {
+            name: "煤竹色",
+            value: "#6c4c49",
+        },
+        {
+            name: "锖色", //第三
+            value: "#6a3427",
+        },
+        {
+            name: "刈安色",
+            value: "#f0dc70",
+        },
+        {
+            name: "浓蓝",
+            value: "#11264f",
+        },
+        {
+            name: "黒茶",
+            value: "#563624",
+        },
+        {
+            name: "桧皮色", //第三
+            value: "#8f4b38",
+        },
+        {
+            name: "黄檗色",
+            value: "#fcf16e",
+        },
+        {
+            name: "勿忘草色",
+            value: "#7bbfea",
+        },
+        {
+            name: "黒橡",
+            value: "#3e4145",
+        },
+        {
+            name: "栗色", //第三
+            value: "#8e3e1f",
+        },
+        {
+            name: "緑黄色",
+            value: "#decb00",
+        },
+        {
+            name: "露草色",
+            value: "#33a3dc",
+        },
+        {
+            name: "浓鼠",
+            value: "#3c3645",
+        },
+        {
+            name: "黄赤", //第三
+            value: "#f36c21",
+        },
+        {
+            name: "鶸色",
+            value: "#cbc547",
+        },
+        {
+            name: "缥色",
+            value: "#228fbd",
+        },
+        {
+            name: "墨",
+            value: "#464547",
+        },
+        {
+            name: "代赭", //第三
+            value: "#b4532a",
+        },
+        {
+            name: "海松色",
+            value: "#6e6b41",
+        },
+        {
+            name: "浅缥",
+            value: "#2468a2",
+        },
+        {
+            name: "黒",
+            value: "#130c0e",
+        },
+        {
+            name: "骆驼色", //第三
+            value: "#b7704f",
+        },
+        {
+            name: "鶸茶",
+            value: "#596032",
+        },
+        {
+            name: "薄缥",
+            value: "#2570a1",
+        },
+        {
+            name: "黒铁",
+            value: "#281f1d",
+        },
+        {
+            name: "黄茶", //第三
+            value: "#de773f",
+        },
+        {
+            name: "山鸠色",
+            value: "#525f42",
+        },
+        {
+            name: "薄花色",
+            value: "#2585a6",
+        },
+        {
+            name: "蝋色",
+            value: "#2f271d",
+        },
+        {
+            name: "洗柿", //第三
+            value: "#c99979",
+        },
+        {
+            name: "生壁色",
+            value: "#5f5d46",
+        },
+        {
+            name: "绀青",
+            value: "#1b315e",
+        },
+        {
+            name: "紫黒",
+            value: "#1d1626",
+        },
+    ]
+    class Color {
+        constructor(el) {
+            this.el = document.querySelector(el)
+            this.inp = this.el.children[0].children[1]
+            this.button = this.el.children[0].children[0]
+            this.app = this.el.parentElement
+            this.ul = this.el.children[2]
+            this.container = this.el.children[1] //color-picker
+            this.colorOpacity = this.container.children[1].children[1];
+
+            this.colorMove = this.container.children[1].children[0];
+
+            this.colorHue = this.container.children[1].children[2];
+            this.colorShow = this.container.children[0].children[0];
+            this.canvas = this.container.children[1].children[0].children[0];
+            this.color = {
+                h: 0,
+                s: "100%",
+                l: "50%",
+                a: 1
+            }
+
+            this.index = 0
+            this.method = "toRgbString"
+            this.apply()
+            this.li = this.ul.children
+            this.click()
+            this.transform()
+            this.mousedown()
+            this.mousemove()
+            this.mouseup()
+            this.draw()
+            
+            this.contextmenu()
+
+        }
+        apply = () => {
+            let index = this
+            var strHtml = ``;
+            colors.forEach((item, index) => {
+                strHtml +=
+                    `
+                <li class="btn" style="background:${item.value};color:${index == 163 || index == 167 || index == 171 ? "black" : "#fff"}" >
+                    <p >${item.name}</p>
+                    <p>${item.value}</p>
+                </li>
+            `
+
+            })
+
+            this.ul.innerHTML = strHtml
+        }
+        click = () => {
+            let index = this;
+
+            for (var i = 0; i < this.li.length; i++) {
+                this.li[i].tempIndex = i;
+                this.li[i].onclick = function () {
+                    console.log(this)
+                    var liIndex = this.tempIndex;
+                    console.log(index)
+                    for (var j = 0; j < index.li.length; j++) {
+                        index.li[j].className = " "
+                        index.app.style.background = " "
+                        index.inp.value = ""
+                    }
+                    this.className = "boxshawdow";
+                    index.app.style.background = `${colors[liIndex].value}`
+
+                    let code = colors[liIndex].value
+                    let R = parseInt(code[1], 16) * 16 + parseInt(code[2], 16)
+                    let G = parseInt(code[3], 16) * 16 + parseInt(code[4], 16)
+                    let B = parseInt(code[5], 16) * 16 + parseInt(code[6], 16)
+                    index.inp.value = `rgb(${R},${G},${B})` //输入框中的值
+                    let temInput = document.createElement('input')
+                    document.body.appendChild(temInput)
+                    temInput.value = `${colors[liIndex].value}`
+
+                    temInput.select()
+                    document.execCommand('Copy')
+                    document.body.removeChild(temInput)
+                }
+            }
+        }
+        transform = () => {
+            let bar = this
+            this.button.onclick = function () {
+                if (bar.inp.value[0] == "#") {
+                    let R = parseInt(bar.inp.value[1], 16) * 16 + parseInt(bar.inp.value[2], 16)
+                    let G = parseInt(bar.inp.value[3], 16) * 16 + parseInt(bar.inp.value[4], 16)
+                    let B = parseInt(bar.inp.value[5], 16) * 16 + parseInt(bar.inp.value[6], 16)
+                    bar.inp.value = bar.inp.value + "→" + `rgb(${R},${G},${B})`
+                    console.log(1111111111111)
+                }
+                if (bar.inp.value[0] == "r") {
+                    let arr = bar.inp.value.split(",")
+                    let arr1 = arr[0].split('(')
+                    let arr2 = arr[2].split(')')
+                    let R = Number(arr[1])
+                    let G = Number(arr1[1])
+                    let B = Number(arr2[0])
+                    let H = `${parseInt(G / 16).toString(16)}${(G % 16).toString(16)}`
+                    let E = `${parseInt(R / 16).toString(16)}${(R % 16).toString(16)}`
+                    let X = `${parseInt(B / 16).toString(16)}${(B % 16).toString(16)}`
+                    bar.inp.value = bar.inp.value + "→" + `#${H}${E}${X}`
+                }
+            }
+        }
+        mousedown = () => {
+            this.container.addEventListener('mousedown', (e) => {
+
+                this.isDown = true
+                if (e.target === this.colorMove || e.target.parentNode === this.colorMove) {
+                    let move = this.colorMove.children[1]
+                    let offsetX = e.clientX - this.colorMove.getBoundingClientRect().left
+                    let offsetY = e.clientY - this.colorMove.getBoundingClientRect().top
+                    let new_top = offsetY - move.offsetHeight / 2
+                    let new_left = offsetX - move.offsetWidth / 2
+                    new_top = Math.min(Math.max(-move.offsetHeight / 2, new_top), this.colorMove.offsetHeight - move.offsetHeight + move.offsetHeight / 2)
+                    new_left = Math.min(Math.max(-move.offsetHeight / 2, new_left), this.colorMove.offsetWidth - move.offsetWidth + move.offsetHeight / 2)
+                    move.style.top = new_top + 'px'
+                    move.style.left = new_left + 'px'
+                    let sX = offsetX / this.canvas.offsetWidth
+                    this.color.s = sX * 100 + '%';
+                    let sY = offsetY / this.canvas.height
+                    let initL = 100 - 50 * sX
+                    this.color.l = initL - initL * sY
+                }
+                this.changeBg()
+            })
+        }
+
+        mousemove = () => {
+            this.container.addEventListener('mousemove', (e) => {
+                if (!this.isDown) return
+                if (e.target === this.colorOpacity || e.target.parentNode === this.colorOpacity) { //处理透明度
+                    let slide = this.colorOpacity.children[1]
+                    let new_top = e.clientY - this.colorOpacity.getBoundingClientRect().top
+                    new_top = Math.min(Math.max(0, new_top), this.colorOpacity.offsetHeight - slide.offsetHeight)
+                    slide.style.top = new_top + "px"
+                    this.color.a = 1 - new_top / this.colorOpacity.offsetHeight
+                }
+                if (e.target === this.colorHue || e.target.parentNode === this.colorHue) {  // 处理色相
+                    let slide = this.colorHue.children[0]
+                    let new_top = e.clientY - this.colorHue.getBoundingClientRect().top
+                    new_top = Math.min(Math.max(0, new_top), this.colorHue.offsetHeight - slide.offsetHeight)
+                    slide.style.top = new_top + 'px'
+                    this.color.h = new_top / this.colorHue.offsetHeight * 360
+                    this.draw()
+                }
+                if (e.target === this.colorMove || e.target.parentNode === this.colorMove) {
+                    let move = this.colorMove.children[1]
+                    let offsetX = e.clientX - this.colorMove.getBoundingClientRect().left
+                    let offsetY = e.clientY - this.colorMove.getBoundingClientRect().top
+                    let new_top = offsetY - move.offsetHeight / 2
+                    let new_left = offsetX - move.offsetWidth / 2
+                    new_top = Math.min(Math.max(-move.offsetHeight / 2, new_top), this.colorMove.offsetHeight - move.offsetHeight + move.offsetHeight / 2)
+                    new_left = Math.min(Math.max(-move.offsetHeight / 2, new_left), this.colorMove.offsetWidth - move.offsetWidth + move.offsetHeight / 2)
+                    move.style.top = new_top + 'px'
+                    move.style.left = new_left + 'px'
+                    let sX = offsetX / this.canvas.offsetWidth
+                    this.color.s = sX * 100 + '%';
+                    let sY = offsetY / this.canvas.height
+                    let initL = 100 - 50 * sX
+                    this.color.l = initL - initL * sY
+                }
+                this.changeBg()
+            })
+
+        }
+        mouseup = () => {
+            this.container.addEventListener('mouseup', (e) => {
+                this.isDown = false
+            })
+        }
+        draw = () => {
+            this.canvas.width = this.canvas.parentNode.offsetWidth;
+            this.canvas.height = this.canvas.parentNode.offsetHeight;
+            let ctx = this.canvas.getContext('2d')
+            let gradient = ctx.createLinearGradient(0, 0, this.canvas.width, 1)
+            gradient.addColorStop(0, "#fff");
+            gradient.addColorStop(1, `hsl(${this.color.h},100%,50%)`)
+            ctx.fillStyle = gradient
+            ctx.fillRect(0, 0, this.canvas.width, 1);
+            let pixelData = ctx.getImageData(0, 0, this.canvas.width - 1, 1).data;
+            for (let i = 0; i < pixelData.length; i += 4) {
+                let data = {
+                    r: pixelData[i],
+                    g: pixelData[i + 1],
+                    b: pixelData[i + 2],
+                    a: pixelData[i + 3]
+                }
+                let gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height)
+                gradient.addColorStop(0, `rgb(${data.r}, ${data.g}, ${data.b})`);
+                gradient.addColorStop(1, `rgb(0,0,0)`);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(i / 4, 0, i / 4, this.canvas.height - 1);
+            }
+
+        }
+        changeBg = () => {
+            this.colorShow.style.background = tinycolor(this.color)[this.method]()
+            this.colorShow.style.color = parseInt(this.color.l) >= 50 ? 'black' : 'white';
+            this.colorShow.innerHTML = tinycolor(this.color)[this.method]()
+            this.inp.value = tinycolor(this.color)[this.method]()
+            this.app.style.background = `radial-gradient(#ccc, ${tinycolor(this.color)[this.method]()})`
+        }
+        contextmenu = () => {
+            window.addEventListener('contextmenu', (e) => {
+             e.preventDefault()
+            let type = {
+                0: 'rgb',
+                1: 'hex',
+                2: 'hsl'
+            }
+            switch (this.index % 3) {
+                case 0:
+                    this.method = "toRgbString";
+                    break;
+                case 1:
+                    this.method = "toHex8String";
+                    break;
+                case 2:
+                    this.method = "toHslString";
+                    break;
+                default:
+                    break;
+            }
+            this.index++
+            this.changeBg()
+            e.preventDefault()
+        
+    })
+    }
+}
+    new Color(".main")
+</script>
